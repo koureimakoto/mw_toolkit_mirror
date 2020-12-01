@@ -1,0 +1,8 @@
+*~
+*.exec
+*.exe
+*.o
+*.a
+*.dll
+*.lib
+*.out
