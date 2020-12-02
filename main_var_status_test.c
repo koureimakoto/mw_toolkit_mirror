@@ -20,7 +20,7 @@
 
 #ifndef MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
 #define MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
-
+#define _MK_VAR_OUTPUT_ 
 #include "variables_output.h"
 
 /*Test Types*/
@@ -28,6 +28,7 @@
 
 int main()
 {
+
   int test = 2;
   int *dtest = &test;
   print_mem(test);

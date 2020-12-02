@@ -23,7 +23,7 @@
 
 #ifndef MK_VERBOSE_LIB_VAR_STATUS_H_
 #define MK_VERBOSE_LIB_VAR_STATUS_H_
-
+  #include "verbose_color.h"
 // You can use or not this header. -D_MK_VAR_OUTPUT_ - GCC or CLang
 #ifdef _MK_VAR_OUTPUT_ 
 
@@ -32,7 +32,7 @@
   int mk_verbose_va_args_count = 0;
 #endif // __MK_VERBOSEO_VA_ARGS_COUNT__
 
-#ifdef __cplusplus  
+#ifdef __cplusplus
   #include <cstring>
   #include <iostream>
   #include <typeinfo>
@@ -93,7 +93,7 @@
     if(strcmp(str, "Pe") == 0) return (char *)"Long Double[*]"; 
     if(strncmp(str, "NSt7",  4) == 0) return (char *)"String";
     if(strncmp(str, "PNSt7", 5) == 0) return (char *)"String[*]";
-    return (char *)"UNK";
+    return (char *)"undefined";
     }
    /* Check if a var is pointer type. */
   template <typename T>
@@ -128,12 +128,46 @@
     if(strcmp(str, "e")  == 0) return (char *)"%lF";
     if(strncmp(str, "NSt7",  4) == 0) return (char *)"%s";
     if(chk_pointer(str) == 1) return (char *)"%p";
-    return (char *)"UNK";
+    return (char *)"undefined";
     }  
+  
+  
+    /* 
+   * PRINT_MEM( variable )
+   *   |
+   *   + variable : Any type.
+   *
+   * Print more verbose status about var 
+   *
+   */
+  #ifndef MK_VERBOSE_MEMORY_BUFFER
+  #define MK_VERBOSE_MEMORY_BUFFER
+  //It protects the variable from trying to be created more than once.
+  char mk_verbose_memory_buffer[50];
+  #endif //MK_VERBOSE_MEMORY_BUFFER
     
-  #define print_mem(x) 
-  #define _(x)
-  #define mk_mem_verbose(title, ...)
+  #define print_mem(x) \
+      std::cout << "   | " << get_name(x) << '{' << type_name(x) << "}::" \
+                << _B_BLU_ << '[' << x << ']' <<_RESET_ << '\n'                        \
+                << "   +----- size[" << sizeof(x) << "]::mem["            \
+                << _B_GRN_ << &x << _RESET_ << "]\n" 
+  
+  
+    /*  
+   *  Memory nested printer
+   *  
+   *  mk_mem_verbose("Section Title",
+   *   _(var)
+   *   _(var2)
+   *   _(var3)
+   * ); 
+   *  Without comma between fuctions.
+   */
+  #define _(x) print_mem(x); mk_verbose_va_args_count += 1;
+  #define mk_mem_verbose(title,...)    \
+    std::cout << '[' << _B_YLW_ << title << _RESET_ << "]\n"; \
+    __VA_ARGS__                        \
+    std::cout << "   +[end]"  << '\n'; \
 
 #else
   #include <stdio.h>
@@ -217,15 +251,15 @@
   #define print_mem(x)                                         \
     snprintf                                                   \
       (                                                        \
-      mk_verbose_memory_buffer, 50, "   | %s{%s}::%s\n",\      \
-      get_name(x), type_name(x),                               \
-      (chk_pointer(x)==1?"->%p": chk_fmt(x))                   \
+      mk_verbose_memory_buffer, 50, "   | %s{%s}::[%s%s%s]\n", \
+      get_name(x), type_name(x), _B_BLU_,                      \
+      (chk_pointer(x)==1?"%p": chk_fmt(x)) , _RESET_           \
       );                                                       \
     printf( mk_verbose_memory_buffer, x);                      \
     printf                                                     \
       (                                                        \
-      "   +-----  size[%ld]::mem[%p]\n",                       \
-      sizeof(x), (void*)&x                                     \
+      "   +-----  size[%ld]::mem[%s%p%s]\n",                   \
+      sizeof(x), _B_GRN_ ,(void*)&x , _RESET_                  \
       )
   
    
@@ -240,14 +274,13 @@
    *  Without comma between fuctions.
    */
   #define _(x) print_mem(x) ; mk_verbose_va_args_count += 1;
-  #define mk_mem_verbose(title,...) \
-    printf("[%s]\n",title);         \
-    __VA_ARGS__                     \
+  #define mk_mem_verbose(title,...)                \
+    printf("[%s%s%s]\n", _B_YLW_, title, _RESET_ );\
+    __VA_ARGS__                                    \
     printf("   +[end]\n")
     
-  #endif // __cplusplus
-  
-  
+#endif // __cplusplus
+
 #else  // _MK_VAR_STATUS_
   
   /* 

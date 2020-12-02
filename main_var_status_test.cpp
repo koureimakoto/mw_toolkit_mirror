@@ -198,7 +198,7 @@ int main()
   double      d  = 0.1f;
   long double ld = 0.1f;
   float       *fp ;
-  double      *dp ;
+  double      *dp = &d;
   long double *ldp;  
   std::cout << "FLOAT TYPE" << '\n'; 
   std::cout << get_name(f)   << " is\t\t: " << type_name(f)   << '\n';
@@ -231,6 +231,13 @@ int main()
   else if(chk_pointer(strp) == 0)
     std::cout << "Is not a Pointer " << '\n';
 
+
+  print_mem(d);
+  print_mem(dp);
+  
+  mk_mem_verbose("Type Float",
+    _(f)_(d)_(fp) _(dp)
+  )
 
   return 0;
 }
