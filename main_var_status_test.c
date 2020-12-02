@@ -21,7 +21,7 @@
 #ifndef MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
 #define MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
 
-#include "variables_status.h"
+#include "variables_output.h"
 
 /*Test Types*/
 #define _TEST_VAR_TYPES_

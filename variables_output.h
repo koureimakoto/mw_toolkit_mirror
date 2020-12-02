@@ -33,16 +33,109 @@
 #endif // __MK_VERBOSEO_VA_ARGS_COUNT__
 
 #ifdef __cplusplus  
+  #include <cstring>
+  #include <iostream>
+  #include <typeinfo>
+  #include <cstdint>
+  #include <cstdbool> // Only GCC accpet _Bool
+  #include <cfloat>   // FLT_EVAL_METHOD
+  
+  #ifndef _Bool
+    #define _Bool bool
+  #endif
 
+  #ifndef float_t
+    #define float_t float
+  #endif
+
+  #ifndef double_t
+    #define double_t double
+  #endif
+  
+  /* Get var name as a string. */
   #define get_name(x) #x
-  #define type_name(x)
-  #define chk_pointer(x)
-  #define chk_fmt(x) 
+  
+  /* Return var type in string form. */
+  template <typename T>
+  char *
+  type_name( T type )
+    {
+    const char * str = typeid(type).name(); 
+    if(strcmp(str, "b")  == 0) return (char *)"Boolean";
+    if(strcmp(str, "Pb") == 0) return (char *)"Boolean[*]";
+    if(strcmp(str, "c")  == 0) return (char *)"Char";
+    if(strcmp(str, "Pc") == 0) return (char *)"Char[*]";
+    if(strcmp(str, "h")  == 0) return (char *)"Unsigned Char";
+    if(strcmp(str, "Ph") == 0) return (char *)"Unsigned Char[*]";
+    if(strcmp(str, "a")  == 0) return (char *)"Signed Char";
+    if(strcmp(str, "Pa") == 0) return (char *)"Signed Char[*]";
+    if(strcmp(str, "i")  == 0) return (char *)"Signed Int";
+    if(strcmp(str, "Pi") == 0) return (char *)"Signed Int[*]";
+    if(strcmp(str, "j")  == 0) return (char *)"Unsigned Int";
+    if(strcmp(str, "Pj") == 0) return (char *)"Unsigned Int[*]";
+    if(strcmp(str, "s")  == 0) return (char *)"Signed Short Int";
+    if(strcmp(str, "Ps") == 0) return (char *)"Signed Short Int[*]";
+    if(strcmp(str, "t")  == 0) return (char *)"Unsigned Short Int";
+    if(strcmp(str, "Pt") == 0) return (char *)"Unsigned Short Int[*]";
+    if(strcmp(str, "l")  == 0) return (char *)"Signed Long Int";
+    if(strcmp(str, "Pl") == 0) return (char *)"Signed Long Int[*]";
+    if(strcmp(str, "m")  == 0) return (char *)"Unsigned Long Int";
+    if(strcmp(str, "Pm") == 0) return (char *)"Unsigned Long Int[*]";
+    if(strcmp(str, "x")  == 0) return (char *)"Signed L.Long Int";
+    if(strcmp(str, "Px") == 0) return (char *)"Signed L.Long Int[*]";
+    if(strcmp(str, "y")  == 0) return (char *)"Unsigned L.Long Int";
+    if(strcmp(str, "Py") == 0) return (char *)"Unsigned L.Long Int[*]";
+    if(strcmp(str, "f")  == 0) return (char *)"Float";
+    if(strcmp(str, "Pf") == 0) return (char *)"Float[*]";
+    if(strcmp(str, "d")  == 0) return (char *)"Double";
+    if(strcmp(str, "Pd") == 0) return (char *)"Double[*]";
+    if(strcmp(str, "e")  == 0) return (char *)"Long Double";
+    if(strcmp(str, "Pe") == 0) return (char *)"Long Double[*]"; 
+    if(strncmp(str, "NSt7",  4) == 0) return (char *)"String";
+    if(strncmp(str, "PNSt7", 5) == 0) return (char *)"String[*]";
+    return (char *)"UNK";
+    }
+   /* Check if a var is pointer type. */
+  template <typename T>
+  int
+  chk_pointer(T type)
+    {
+      if(strncmp(typeid(type).name(), "P", 1) == 0)
+        return 1;
+      return 0;
+    }
+  
+  /* Check the format of the variable to print formatted */
+  template <typename T>
+  char *
+  chk_fmt(T type)
+    {
+    const char * str = typeid(type).name(); 
+    if(strcmp(str, "b")  == 0) return (char *)"%d";
+    if(strcmp(str, "c")  == 0) return (char *)"%c";
+    if(strcmp(str, "h")  == 0) return (char *)"%c";
+    if(strcmp(str, "a")  == 0) return (char *)"%c";
+    if(strcmp(str, "i")  == 0) return (char *)"%d";
+    if(strcmp(str, "j")  == 0) return (char *)"%u";
+    if(strcmp(str, "s")  == 0) return (char *)"%h";
+    if(strcmp(str, "t")  == 0) return (char *)"%hu";
+    if(strcmp(str, "l")  == 0) return (char *)"%ld";
+    if(strcmp(str, "m")  == 0) return (char *)"%lu";
+    if(strcmp(str, "x")  == 0) return (char *)"%lld";
+    if(strcmp(str, "y")  == 0) return (char *)"%llu";
+    if(strcmp(str, "f")  == 0) return (char *)"%F";
+    if(strcmp(str, "d")  == 0) return (char *)"%F";
+    if(strcmp(str, "e")  == 0) return (char *)"%lF";
+    if(strncmp(str, "NSt7",  4) == 0) return (char *)"%s";
+    if(chk_pointer(str) == 1) return (char *)"%p";
+    return (char *)"UNK";
+    }  
+    
   #define print_mem(x) 
   #define _(x)
   #define mk_mem_verbose(title, ...)
 
-  #else
+#else
   #include <stdio.h>
   #include <string.h>
   #include <stddef.h>
@@ -88,7 +181,7 @@
 
   /* Check the format of the variable to print formatted */
   #define chk_fmt(x) _Generic((x), \
-  _Bool         : "%s"  , signed char           : "%c"   ,\
+  _Bool         : "%d"  , signed char           : "%c"   ,\
   char          : "%c"  , unsigned char         : "%c"   ,\
   short int     : "%h"  , unsigned short int    : "%hu"  ,\
   int           : "%d"  , unsigned int          : "%u"   ,\
