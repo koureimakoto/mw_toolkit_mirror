@@ -23,8 +23,13 @@
 
 #ifndef MW_TOOLKIT_H_
 #define MW_TOOLKIT_H_
+  #if defined( __MK_TOOLKIT_SIMPLIFIER__ )
 
-  #if defined( __MW_TOOLKIT__ )
+     #include "mw_simplifier/mw_simplifier.hpp"
+
+  #endif // __MK_TOOLKIT_SIMPLIFIER__
+
+  #if defined( __MW_TOOLKIT_VERBOSE__ )
 
     #define __MW_VERBOSE__
     #define __MW_FINAL_OUTPUT__
@@ -35,8 +40,7 @@
     #ifdef __cplusplus
   
       #include "mw_verbose/mw_verbose.hpp"
-      #include "mw_simplifier/mw_simplifier.hpp"
-  
+        
     #else
   
       #include "mw_verbose/mw_verbose.h"
