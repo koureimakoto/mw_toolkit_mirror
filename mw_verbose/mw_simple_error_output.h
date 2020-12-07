@@ -21,24 +21,16 @@
 *******************************************************************************/
 
 
-#ifndef MK_VERBOSE_LIB_SIMPLE_ERROR_OUTPUT_H_
-#define MK_VERBOSE_LIB_SIMPLE_ERROR_OUTPUT_H_
+#ifndef MW_VERBOSE_SIMPLE_ERROR_OUTPUT_H_
+#define MW_VERBOSE_SIMPLE_ERROR_OUTPUT_H_
 
-  #if defined(_MK_SIMPLE_ERROR_) // Precompiler for active error verbose messege.
-    #ifdef __cplusplus     // G++ or CLang++ Compilers  - C++.
-      #define mk_serror(x) \
-        if((strncmp(mk_verbose_line,__FILE__, _MAX_VERBOSE_SIZE_) != 0))       \
+  // Precompiler for active error verbose message.
+  #ifdef __MW_SIMPLE_ERROR_OUTPUT__
+    #ifndef __cplusplus
+      #define mw_serror(x)                                                     \
+        if((strncmp(mw_verbose_line,__FILE__, MAX_VERBOSE_SIZE) != 0))         \
           {                                                                    \
-          strncpy(mk_verbose_line, __FILE__, _MAX_VERBOSE_SIZE_);              \
-          std::cerr << _B_YLW_ << "::" << __FILE__ << _RESET_ << endl;         \
-          }                                                                    \
-        mk_error_count += 1;                                                   \
-        cerr << _B_RED_ << "\t<" << __LINE__ << "> " << _RESET_ << x << endl; 
-    #else                // GCC ou CLang Compilers.    - C [[Default]]
-      #define mk_serror(x)                                                     \
-        if((strncmp(mk_verbose_line,__FILE__, _MAX_VERBOSE_SIZE_) != 0))       \
-          {                                                                    \
-          strncpy(mk_verbose_line, __FILE__, _MAX_VERBOSE_SIZE_);              \
+          strncpy(mw_verbose_line, __FILE__, MAX_VERBOSE_SIZE);                \
           fprintf                                                              \
             (                                                                  \
             stderr,                                                            \
@@ -46,17 +38,14 @@
             _B_YLW_, __FILE__, _RESET_                                         \
             );                                                                 \
           }                                                                    \
-        mk_error_count += 1;                                                   \
+        mw_error_count += 1;                                                   \
         fprintf                                                                \
           (                                                                    \
           stderr,                                                              \
           "%s\t<%d>%s %s \n",                                                  \
           _B_RED_,__LINE__,_RESET_ , x                                         \
           )
-    #endif // END _L_CPP.
-  // If not has been defined V_simple, all function will be set blank.
-  #else
-    #define mk_serror(x)
-  #endif // END _V_S_ERROR_.
+    #endif // __cplusplus
+  #endif   // __MW_SIMPLE_ERROR_OUTPUT__
 
-#endif // MK_VERBOSE_LIB_HEADER_
+#endif // MW_VERBOSE_SIMPLE_ERROR_OUTPUT_H_

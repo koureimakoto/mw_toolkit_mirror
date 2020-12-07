@@ -21,7 +21,7 @@
 #ifndef MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
 #define MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
 #define _MK_VAR_OUTPUT_ 
-#include "variables_output.h"
+#include "mw_complex_msg_output.h"
 
 /*Test Types*/
 #define _TEST_VAR_TYPES_
@@ -35,7 +35,7 @@ int main()
   print_mem(dtest);
 
  
-  mk_mem_verbose("Struct X",
+  mw_mem_verbose("Struct X",
     _(test)
     _(dtest)
   );

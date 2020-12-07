@@ -18,13 +18,14 @@
 
 
 
-#ifndef MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
-#define MK_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
-#define _MK_VAR_OUTPUT_ 
-#include "variables_output.h"
+#ifndef MW_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
+#define MW_VERBOSE_LIB_MAIN_VAR_STATUS_TEST_C_
+#define _MW_VAR_OUTPUT_ 
+#include "mw_complex_msg_output.hpp"
 
 /*Test Types*/
 //#define _TEST_VAR_TYPES_
+
 
 int main()
 {
@@ -235,8 +236,9 @@ int main()
   print_mem(d);
   print_mem(dp);
   
-  mk_mem_verbose("Type Float",
-    _(f)_(d)_(fp) _(dp)
+  
+  mw_mem_verbose("Type Float",
+    _(f)_(d)_(fp) _(dp) 
   )
 
   return 0;

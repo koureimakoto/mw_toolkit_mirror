@@ -21,24 +21,15 @@
 *******************************************************************************/
 
 
-#ifndef MK_VERBOSE_LIB_SIMPLE_MSG_OUTPUT_H_
-#define MK_VERBOSE_LIB_SIMPLE_MSG_OUTPUT_H_
+#ifndef MW_VERBOSE_SIMPLE_MSG_OUTPUT_H_
+#define MW_VERBOSE_SIMPLE_MSG_OUTPUT_H_
 
-  #if defined(_MK_SIMPLE_MSG_) // Precompiler for active simple verbose messege.
-    #if   defined(_L_CPP_) // G++ or CLang++ Compilers  - C++.
-      #define mk_smsg(x) \
-        if((strncmp(mk_verbose_line,__FILE__, _MAX_VERBOSE_SIZE_) != 0)) \
+  #ifdef __MW_SIMPLE_MSG_OUTPUT__
+    #ifndef __cplusplus
+      #define mw_smsg(x)                                                       \
+        if((strncmp(mw_verbose_line,__FILE__, MAX_VERBOSE_SIZE) != 0))         \
           {                                                                    \
-          strncpy(mk_verbose_line, __FILE__,_MAX_VERBOSE_SIZE_);               \
-          std::cout << _B_YLW_ << "::" << __FILE__ << _RESET_ << endl;         \
-          }                                                                    \
-        mk_msg_count += 1;                                                     \
-        cout << _B_BLU_ << "\t<" << __LINE__ << "> " << _RESET_ << x << endl;
-    #else                 // GCC ou CLang Compilers.    - C [[Default]]
-      #define mk_smsg(x)                                                       \
-        if((strncmp(mk_verbose_line,__FILE__, _MAX_VERBOSE_SIZE_) != 0))       \
-          {                                                                    \
-          strncpy(mk_verbose_line, __FILE__, _MAX_VERBOSE_SIZE_ );             \
+          strncpy(mw_verbose_line, __FILE__, MAX_VERBOSE_SIZE );               \
           fprintf                                                              \
             (                                                                  \
             stdout,                                                            \
@@ -46,7 +37,7 @@
             _B_YLW_, __FILE__, _RESET_                                         \
             );                                                                 \
           }                                                                    \
-        mk_msg_count += 1;                                                     \
+        mw_msg_count += 1;                                                     \
         fprintf                                                                \
           (                                                                    \
           stdout,                                                              \
@@ -54,9 +45,6 @@
           _B_BLU_,__LINE__,_RESET_ , x                                         \
           )
     #endif // END _L_CPP.
-  // If not has been defined V_simple, all funion will be set blank.
-  #else
-    #define mk_smsg(x)
-  #endif // END _V_S_MSG_.
+  #endif   //__MW_SIMPLE_ERROR_OUTPUT__
 
-#endif // MK_VERBOSE_LIB_SIMPLE_MSG_OUTPUT_H_
+#endif // MW_VERBOSE_SIMPLE_MSG_OUTPUT_H_
